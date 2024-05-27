@@ -54,7 +54,11 @@ pipeline {
 		sh 'docker rmi "$ARTIFACTORY_DOCKER_REGISTRY$APP_NAME:latest_dev"'
             }
         }
-	
+	 stage('Build') {
+            steps {
+                sh 'docker build -t myapp_img .'
+            }
+        }
 	   stage("Run server"){
 		    steps {
 			     dir('demo') {
