@@ -16,9 +16,9 @@ WORKDIR /app
 COPY --from=builder /home/gradle/project/build/libs/demo-0.0.1-SNAPSHOT.jar /app/demo.jar
 
 # Copy files to the container in /app/crypto
-COPY demo/crypto/serverErat.ks /app/crypto/serverErat.ks
-COPY demo/crypto/ec-cacert.pem /app/crypto/ec-cacert-pem
-COPY demo/crypto/ec-cakey.jks /app/crypto/ec-cakey.jks
+COPY crypto/serverErat.ks /app/crypto/serverErat.ks
+COPY crypto/ec-cacert.pem /app/crypto/ec-cacert-pem
+COPY crypto/ec-cakey.jks /app/crypto/ec-cakey.jks
 COPY resources/temperatura /app/resources/temperatura
 
 # Expose port 5000
