@@ -56,7 +56,7 @@ pipeline {
         }
 	 stage('Build') {
             steps {
-                sh 'docker build -t myapp_img .'
+                sh 'docker build -t myapp_img -f demo/Dockerfile .'
             }
         }
 	   stage("Run server"){
