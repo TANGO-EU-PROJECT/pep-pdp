@@ -19,7 +19,7 @@ COPY --from=builder /home/gradle/project/build/libs/demo-0.0.1-SNAPSHOT.jar /app
 COPY demo/crypto/serverErat.ks /app/crypto/serverErat.ks
 COPY demo/crypto/ec-cacert.pem /app/crypto/ec-cacert-pem
 COPY demo/crypto/ec-cakey.jks /app/crypto/ec-cakey.jks
-COPY demo/src/main/resources/temperatura /app/resources/temperatura
+COPY demo/resources/temperatura /app/resources/temperatura
 
 # Expose port 5000
 EXPOSE 5000
