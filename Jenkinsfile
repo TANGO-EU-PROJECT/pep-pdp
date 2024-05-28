@@ -55,12 +55,14 @@ pipeline {
             }
         }
 	
-	   stage("Run server"){
-		    steps {
-			     dir('demo') {
-				    sh 'docker compose up'
-				    }
-		    }
-	   }
+	 stage("Deployment"){
+       	    steps {
+               withKubeConfig([credentialsId: 'K8s-config-file' , serverUrl: 'https://167.235.66.115:6443', namespace:'tango-development']) {
+                 sh 'kubectl apply -f rest-api-deployment.yml'
+		 sh 'kubectl apply -f rest-api-ingress.yml'
+                 sh 'kubectl get pods'
+               }
+ 
+            }
    }
 }
