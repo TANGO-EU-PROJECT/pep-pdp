@@ -58,7 +58,7 @@ pipeline {
 	   stage("Run server"){
 		    steps {
 			     dir('demo') {
-				    sh 'docker compose up -d'
+				    sh 'docker compose up'
 				    }
 		    }
 	   }
