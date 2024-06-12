@@ -62,7 +62,7 @@ pipeline {
 		 sh 'kubectl apply -f service.yaml'
                  sh 'kubectl get pods'
                }
- 
+	    }
             }
    }
 }
