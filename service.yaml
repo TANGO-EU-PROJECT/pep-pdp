@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name:  {{ .Release.Name }}
+  name:  pep-pdp-deployment
 spec:
   selector:
-    app: {{ .Release.Name }}
+    app: myapp
   ports:
     - protocol: TCP
       port: 80 # El puerto externo
-      targetPort: {{ .Values.myapp.containerPort }} # El puerto del contenedor
+      targetPort: 8088 # El puerto del contenedor
 
