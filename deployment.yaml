@@ -1,29 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: pep-pdp-deployment
   labels:
-    app: {{ .Release.Name }}
+    app: myapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: myapp
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: myapp
     spec:
       containers:
-        - name: {{ .Release.Name }}
-          image: "{{ .Values.myapp.image }}:{{ .Values.myapp.imageTag }}"
+        - name: pep-pdp-deployment
+          image: "harbor.tango.rid-intrasoft.eu/pdp-pep/pdp-pep:latest_dev"
           ports:
-            - containerPort: {{ .Values.myapp.containerPort }}
+            - containerPort: 8088
           env:
-            {{- range .Values.myapp.env }}
-            - name: {{ .name }}
-              value: {{ .value | quote }}
-            {{- end }}
+             - name: PDP_PORT
+               value: "8088"
+             - name: PDP_CONFIG
+               value: "test"
+             - name: PDP_KS
+               value: "/app/crypto/serverErat.ks"
+             - name: PDP_PW
+               value: "hola123"
+             - name: PDP_ALIAS
+               value: "MiAliasPriv"
+             - name: DLT_IP
+               value: "erat-server"
+             - name: DLT_PORT
+               value: "8086"
+             - name: IDAGENT_KS
+               value: "/app/crypto/ec-cakey.jks"
+             - name: IDAGENT_PW
+               value: "hola123"
+             - name: IDAGENT_ALIAS
+               value: "myserver"
+             - name: IDAGENT_CERT
+               value: "/app/crypto/ec-cacert.pem"
+             - name: IDAGENT_IP
+               value: "127.21.0.4"
+             - name: IDAGENT_PORT
+               value: "8082"
+             - name: RESOURCES
+               value: "/app/resources"
+             - name: CT_EXPIRATION
+               value: "2600000"
           volumeMounts:
             - name: build-libs
               mountPath: /app/build/libs
@@ -39,8 +65,6 @@ spec:
               mountPath: /app/resources
             - name: temperatura
               mountPath: /app/temperatura
-      imagePullSecrets:
-        - name: harbor-secret
       volumes:
         - name: build-libs
           hostPath:
