@@ -15,6 +15,12 @@ pipeline {
       ARTIFACTORY_DOCKER_REGISTRY = "harbor.tango.rid-intrasoft.eu/pdp-pep/"
       BRANCH_NAME = "main"
       DOCKER_IMAGE_TAG = "$APP_NAME:R${env.BUILD_ID}"
+	TAG = 'latest_dev'    
+	KUBERNETES_NAMESPACE = 'ips-testing1'
+      HARBOR_SECRET = 'harborsecret'
+	 CHART_NAME = 'myapp'    
+	    CHART_PATH = 'Chart.yaml'
+	    RELEASE_NAME = 'peppdp'
     }
    stages {
         stage('Compile') {
@@ -57,11 +63,14 @@ pipeline {
 	
 	 stage("Deployment"){
        	    steps {
-               withKubeConfig([credentialsId: 'K8s-config-file' , serverUrl: 'https://167.235.66.115:6443', namespace:'tango-development']) {
-                 sh 'kubectl apply -f deployment.yaml'
-		 sh 'kubectl apply -f service.yaml'
-                 sh 'kubectl get pods'
-               }
+              script {
+                    sh """
+                    helm upgrade --install ${RELEASE_NAME} ${CHART_PATH} \
+                        --namespace ${KUBERNETES_NAMESPACE} \
+                        --set image.repository=${ARTIFACTORY_DOCKER_REGISTRY}/${APP_NAME} \
+                        --set image.tag=${TAG}
+                    """
+                }
 	    }
             }
    }
