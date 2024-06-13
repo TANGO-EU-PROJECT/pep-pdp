@@ -63,14 +63,10 @@ pipeline {
 	
 	 stage("Deployment"){
        	    steps {
-              script {
-                    sh """
-                    helm upgrade --install ${RELEASE_NAME} ${CHART_PATH} \
-                        --namespace ${KUBERNETES_NAMESPACE} \
-                        --set image.repository=${ARTIFACTORY_DOCKER_REGISTRY}/${APP_NAME} \
-                        --set image.tag=${TAG}
-                    """
-                }
+               withKubeConfig([credentialsId: 'K8s-config-file', serverUrl: 'https://kubernetes.tango.rid-intrasoft.eu:6443', namespace: 'ips-testing1']) {
+                    sh 'kubectl apply -f deployment.yaml'
+                    sh 'kubectl apply -f service.yaml'
+                    sh 'kubectl get pods -n ${KUBERNETES_NAMESPACE}'
 	    }
             }
    }
